@@ -15,36 +15,26 @@ public class XMPPChatServer extends FSM implements IFSM {
     }
 
     static int READY = 0;
+    static int READY1 = 1;
     @Override
     public void init() {
-        addTransition(READY, new Message(Message.Types.REGISTER), "onClientRegister");
-        addTransition(READY, new Message(Message.Types.ROOM_LIST_REQUEST), "returnRoomList");
+        addTransition(READY, new Message(Message.Types.REGISTER_TO_SERVER), "onServerRegister");
+        addTransition(READY1, new Message(Message.Types.REGISTER), "onClientRegister");
     }
 
-    public void onClientRegister(IMessage message){
+    public void onServerRegister(IMessage message){
         Message msg = (Message) message;
-        Message response = new Message(Message.Types.LOGIN_SUCCESSFULL);
+        Message response = new Message(Message.Types.CONNECTED_SUCCESSFULL);
         response.setToAddress(msg.getFromAddress());
         sendMessage(response);
-        System.out.println("Client " + msg.getParam(Message.Params.USERNAME) + " connected!");
+        setState(READY1);
     }
-    public void returnRoomList(IMessage message){
-        System.out.println("Room list requested!");
+    public void onClientRegister(IMessage message){
         Message msg = (Message) message;
-        String token = ((Message) message).getParam(Message.Params.TOKEN);
-        Message response = new Message(Message.Types.ROOM_LIST_RESPONSE);
+        Message response = new Message(Message.Types.REGISTRATION_SUCCESSFULL);
         response.setToAddress(msg.getFromAddress());
-
-        //check token for login
-        if (token != null && true){
-            ArrayList<String> room_list = new ArrayList<>();
-            room_list.add("TKM1");
-            room_list.add("TKM2");
-            response.addParam(Message.Params.ROOM_LIST, room_list);
-        }else{
-            System.out.println("NOT AUTHENTICATED! METHOD NOT IMPLEMENTED!");
-        }
-
+        Users user = new Users(Message.Params.USERNAME, Message.Params.EMAIL, Message.Params.PASSWORD, Message.Params.ROLE);
+        System.out.println("Client " + user.getUSERNAME() + " connected!");
         sendMessage(response);
     }
 

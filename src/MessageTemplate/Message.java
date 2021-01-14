@@ -11,36 +11,20 @@ import java.util.Map;
 
 public class Message implements IMessage, Cloneable {
     public static class Types{
-        public static int REGISTER = 0;
-        public static int LOGIN_SUCCESSFULL = 1;
-
-        public static int CHECK_IN_REQUEST = 2;
-        public static int CHECK_OUT_REQUEST = 3;
-        public static int CHECK_IN_OUT_RESPONSE = 4;
-
-        public static int ROOM_LIST_REQUEST = 4;
-        public static int ROOM_LIST_RESPONSE = 5;
-
-        public static int USERS_LIST_REQUEST = 6;
-        public static int USERS_LIST_RESPONSE = 7;
-
-        public static int INCOMING_MSG = 8;
-        public static int OUTGOING_MSG = 9;
-
-        public static int DELETE_ACCOUNT_REQUEST = 200;
-        public static int DELETE_ACCOUNT_RESPONSE = 201;
-
+        public static int REGISTER_TO_SERVER = 0;
+        public static int CONNECTED_SUCCESSFULL = 1;
+        public static int REGISTER = 2;
+        public static int REGISTRATION_SUCCESSFULL = 2;
         public static int RESOLVE_DOMAIN_NAME = 300;
-        public static int ERROR = 400;
     }
     public static class Params{
         public static String DOMAIN = "domain_name";
         public static String IP = "ip_addr";
-        public static String NICKNAME = "nickname";
         public static String USERNAME = "username";
         public static String PASSWORD = "password";
+        public static String EMAIL = "email";
+        public static String ROLE = "role";
         public static String TOKEN = "token";
-        public static String ROOM_LIST = "room_list";
     }
     private int messageId;
     private int toId = 5; //TCP machine ID
