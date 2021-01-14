@@ -1,5 +1,7 @@
 package SPD.XMPP.Chat;
 
+import java.util.Objects;
+
 public class Users {
     private String USERNAME;
     private String EMAIL;
@@ -52,5 +54,18 @@ public class Users {
                 ", PASSWORD='" + PASSWORD + '\'' +
                 ", ROLE='" + ROLE + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Users users = (Users) o;
+        return Objects.equals(USERNAME, users.USERNAME) && Objects.equals(EMAIL, users.EMAIL) && Objects.equals(PASSWORD, users.PASSWORD) && Objects.equals(ROLE, users.ROLE);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(USERNAME, EMAIL, PASSWORD, ROLE);
     }
 }

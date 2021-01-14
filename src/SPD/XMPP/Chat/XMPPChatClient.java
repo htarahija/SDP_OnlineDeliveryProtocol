@@ -17,7 +17,8 @@ public class XMPPChatClient extends FSM implements IFSM {
     static int READY_TO_CONNECT = 1;
     static int CONNECTING = 2;
     static int CONNECTED = 3;
-    static int VERIFICATED = 4;
+    static int VERIFICATED_REG = 4;
+    static int VERIFICATED_LOGIN = 5;
     static int ORDERED = 5;
     public XMPPChatClient(int id) {
         super(id);
@@ -29,7 +30,10 @@ public class XMPPChatClient extends FSM implements IFSM {
         addTransition(READY_TO_CONNECT, new Message(Message.Types.REGISTER_TO_SERVER), "registerOnServer");
         addTransition(CONNECTING, new Message(Message.Types.CONNECTED_SUCCESSFULL), "connectionSuccessful");
         addTransition(CONNECTED, new Message(Message.Types.REGISTER), "registerUser");
-        addTransition(VERIFICATED, new Message(Message.Types.REGISTRATION_SUCCESSFULL), "verificatedUser");
+        addTransition(CONNECTED, new Message(Message.Types.LOGIN), "loginUser");
+        addTransition(VERIFICATED_REG, new Message(Message.Types.REGISTRATION_SUCCESSFULL), "verificatedRegistredUser");
+        addTransition(VERIFICATED_LOGIN, new Message(Message.Types.LOGIN_SUCCESSFULL), "verificatedLoginUser");
+        addTransition(CONNECTED, new Message(Message.Types.LOGIN_UNSUCCESSFULL), "unlocatedLoginUser");
     }
 
     public void resolveDomain(IMessage message){
@@ -60,14 +64,25 @@ public class XMPPChatClient extends FSM implements IFSM {
         request.setMessageId(Message.Types.REGISTER);
         System.out.println("Registration...");
         sendMessage(request);
-        setState(VERIFICATED);
+        setState(VERIFICATED_REG);
     }
-    public void verificatedUser(IMessage message){
-        //Message request = new Message(Message.Types.REGISTER);
-        //request.setMessageId(Message.Types.REGISTER);
+    public void loginUser(IMessage message){
+        Message request = new Message(Message.Types.LOGIN);
+        request.setMessageId(Message.Types.LOGIN);
+        System.out.println("Login...");
+        sendMessage(request);
+        setState(VERIFICATED_LOGIN);
+    }
+    public void unlocatedLoginUser(IMessage message){
+        System.out.println("FULAA");
+        setState(CONNECTED);
+    }
+    public void verificatedRegistredUser(IMessage message){
         System.out.println("Registrated user.");
-        //sendMessage(request);
-        //setState(ORDERED);
+        setState(CONNECTED);
+    }
+    public void verificatedLoginUser(IMessage message){
+        System.out.println("Login.");
     }
     static int SERVER_PORT = 9999;
     static String SERVER_URL = "";
@@ -136,7 +151,15 @@ public class XMPPChatClient extends FSM implements IFSM {
         tempMsg.addParam(Message.Params.ROLE, "admin");
         dis.addMessage(tempMsg);
 
+        Thread.sleep(1000);
 
+        tempMsg = new Message(Message.Types.LOGIN);
+        tempMsg.setToId(0);
+        tempMsg.addParam(Message.Params.USERNAME, "reha");
+        tempMsg.addParam(Message.Params.PASSWORD, "edo");
+        tempMsg.addParam(Message.Params.EMAIL, "a@a.a");
+        tempMsg.addParam(Message.Params.ROLE, "admin");
+        dis.addMessage(tempMsg);
 
         while(true){
 

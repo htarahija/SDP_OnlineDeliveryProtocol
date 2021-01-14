@@ -14,7 +14,10 @@ public class Message implements IMessage, Cloneable {
         public static int REGISTER_TO_SERVER = 0;
         public static int CONNECTED_SUCCESSFULL = 1;
         public static int REGISTER = 2;
-        public static int REGISTRATION_SUCCESSFULL = 2;
+        public static int REGISTRATION_SUCCESSFULL = 3;
+        public static int LOGIN = 4;
+        public static int LOGIN_SUCCESSFULL = 5;
+        public static int LOGIN_UNSUCCESSFULL = 5;
         public static int RESOLVE_DOMAIN_NAME = 300;
     }
     public static class Params{
